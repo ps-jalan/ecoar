@@ -1,13 +1,11 @@
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+  <q-page class="flex flex-center bg-dark text-white">
+    <q-img
+      src="~assets/logos/logo_white.webp"
+      alt="Ecoar logo"
+      style="width: 200px; height: auto"
+    />
   </q-page>
 </template>
 
-<script setup>
-//
-</script>
+<script setup></script>
