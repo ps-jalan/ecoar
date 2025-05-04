@@ -66,29 +66,25 @@
 
 <script setup>
 import { ref } from 'vue'
-import { supabase } from 'boot/supabase'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from 'stores/auth'
+
+const router = useRouter()
+const authStore = useAuthStore()
 
 const email = ref('')
 const senha = ref('')
-const router = useRouter()
 
 const login = async () => {
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: senha.value,
-  })
-  if (error) {
-    alert(error.message)
-  } else {
+  const result = await authStore.loginWithEmail(email.value, senha.value)
+  if (result.success) {
     router.push('/home')
+  } else {
+    alert(result.message)
   }
 }
 
-const loginWithGoogle = async () => {
-  await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: window.location.origin + '/home' },
-  })
+const loginWithGoogle = () => {
+  authStore.loginWithGoogle()
 }
 </script>
