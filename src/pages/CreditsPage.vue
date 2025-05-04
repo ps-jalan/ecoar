@@ -74,7 +74,7 @@ onMounted(async () => {
   }
 
   const { data, error } = await supabase
-    .from('coletas')
+    .from('Coletas')
     .select('*')
     .eq('user_id', user.id)
     .eq('status', 'revisado')

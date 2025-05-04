@@ -94,7 +94,7 @@ async function salvarColeta() {
   }
 
   const { data, error } = await supabase
-    .from('coletas')
+    .from('Coletas')
     .insert([
       {
         user_id: user.id,

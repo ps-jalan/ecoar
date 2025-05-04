@@ -8,7 +8,8 @@
 
         <q-card-section class="flex flex-center column">
           <q-avatar size="100px" class="q-mb-md">
-            <img :src="foto || 'https://cdn.quasar.dev/img/avatar.png'" />
+            <img v-if="foto" :src="foto" />
+            <q-icon v-else name="person" size="100px" class="text-white" />
           </q-avatar>
           <q-btn flat label="Alterar foto" @click="alterarFoto" class="btn-outline-white q-mb-md" />
         </q-card-section>

@@ -1,6 +1,13 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-dark text-white">
     <q-page-container>
+      <q-inner-loading
+        :showing="loadingStore.isLoading"
+        label="Carregando..."
+        color="primary"
+        label-class="text-white"
+        dark
+      />
       <router-view />
     </q-page-container>
 
@@ -20,7 +27,10 @@
   </q-layout>
 </template>
 
-<script setup></script>
+<script setup>
+import { useLoadingStore } from 'stores/loading'
+const loadingStore = useLoadingStore()
+</script>
 
 <style scoped>
 img {

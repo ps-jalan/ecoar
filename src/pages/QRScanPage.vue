@@ -40,7 +40,13 @@ onMounted(() => {
         })
       },
       (errorMessage) => {
-        console.error(errorMessage)
+        if (
+          errorMessage !== 'QR code parse error, error = No barcode or QR code detected.' &&
+          errorMessage !==
+            'QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.'
+        ) {
+          console.error(errorMessage)
+        }
       },
     )
     .catch((err) => {

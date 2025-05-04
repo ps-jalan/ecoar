@@ -1,43 +1,33 @@
 import { route } from 'quasar/wrappers'
-import {
-  createRouter,
-  createMemoryHistory,
-  createWebHistory,
-  createWebHashHistory,
-} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
-import { supabase } from 'boot/supabase'
 import { useUserStore } from 'stores/user'
 
 export default route(function () {
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : process.env.VUE_ROUTER_MODE === 'history'
-      ? createWebHistory
-      : createWebHashHistory
-
-  const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+  const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
     routes,
-    history: createHistory(process.env.VUE_ROUTER_BASE),
   })
 
-  Router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore()
 
+    // Tenta recuperar o usuário se ainda não estiver carregado
     if (!userStore.user) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      userStore.user = user
+      await userStore.fetchUser()
     }
 
-    if (to.meta.requiresAuth && !userStore.user) {
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+    const isAuthPage = ['/login', '/register', '/'].includes(to.path)
+
+    if (requiresAuth && !userStore.user) {
       next('/login')
+    } else if (userStore.user && isAuthPage) {
+      next('/home')
     } else {
       next()
     }
   })
 
-  return Router
+  return router
 })

@@ -64,7 +64,7 @@ function formatarData(str) {
 
 onMounted(async () => {
   const { id } = route.params
-  const { data, error } = await supabase.from('coletas').select('*').eq('id', id).single()
+  const { data, error } = await supabase.from('Coletas').select('*').eq('id', id).single()
 
   if (error) {
     alert('Erro ao buscar coleta: ' + error.message)
