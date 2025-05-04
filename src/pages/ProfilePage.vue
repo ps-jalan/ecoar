@@ -40,11 +40,9 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'stores/user'
-import { useAuthStore } from 'stores/auth'
 
 const router = useRouter()
 const userStore = useUserStore()
-const authStore = useAuthStore()
 
 const nome = ref('')
 const email = ref('')
@@ -69,7 +67,7 @@ async function salvarPerfil() {
 }
 
 async function logout() {
-  await authStore.logout()
+  await userStore.logout()
   router.push('/login')
 }
 

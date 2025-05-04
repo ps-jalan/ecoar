@@ -67,16 +67,16 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from 'stores/auth'
+import { useUserStore } from 'stores/user'
 
 const router = useRouter()
-const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const email = ref('')
 const senha = ref('')
 
 const login = async () => {
-  const result = await authStore.loginWithEmail(email.value, senha.value)
+  const result = await userStore.loginWithEmail(email.value, senha.value)
   if (result.success) {
     router.push('/home')
   } else {
@@ -85,6 +85,6 @@ const login = async () => {
 }
 
 const loginWithGoogle = () => {
-  authStore.loginWithGoogle()
+  userStore.loginWithGoogle()
 }
 </script>
