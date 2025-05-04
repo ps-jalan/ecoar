@@ -1,17 +1,23 @@
 import { defineStore } from 'pinia'
+import { supabase } from 'boot/supabase'
 
-export const useRequestStore = defineStore('request', {
+export const useRequestsStore = defineStore('requests', {
   state: () => ({
-    currentRequest: null,
-    history: JSON.parse(localStorage.getItem('ecoar_history') || '[]'),
+    status: null,
   }),
   actions: {
-    setRequest(req) {
-      this.currentRequest = req
-    },
-    setHistory(list) {
-      this.history = list
-      localStorage.setItem('ecoar_history', JSON.stringify(list))
+    async fetchStatus(requestId) {
+      const { data, error } = await supabase
+        .from('Coletas')
+        .select('status')
+        .eq('id', requestId)
+        .single()
+      if (error) {
+        console.error('Erro ao buscar status da coleta:', error.message)
+        return null
+      }
+      this.status = data.status
+      return data.status
     },
   },
 })

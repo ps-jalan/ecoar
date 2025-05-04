@@ -1,6 +1,7 @@
 // src/stores/auth.js
 import { defineStore } from 'pinia'
 import { supabase } from 'boot/supabase'
+import { Notify } from 'quasar'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -26,7 +27,9 @@ export const useAuthStore = defineStore('auth', {
         },
       })
       if (error) {
-        console.error('Erro no login com Google:', error.message)
+        Notify.create({ type: 'negative', message: error.message })
+      } else {
+        Notify.create({ type: 'positive', message: 'Perfil atualizado!' })
       }
     },
 

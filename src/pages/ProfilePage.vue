@@ -39,18 +39,19 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { supabase } from 'boot/supabase'
-import { Notify } from 'quasar'
+import { useUserStore } from 'stores/user'
+import { useAuthStore } from 'stores/auth'
+
+const router = useRouter()
+const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const nome = ref('')
 const email = ref('')
 const foto = ref('')
-const router = useRouter()
 
 onMounted(async () => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await userStore.fetchUser()
   if (user) {
     nome.value = user.user_metadata?.nome || ''
     email.value = user.email
@@ -59,22 +60,16 @@ onMounted(async () => {
 })
 
 async function salvarPerfil() {
-  const updates = {
+  await userStore.updateUser({
     data: {
       nome: nome.value,
       avatar_url: foto.value,
     },
-  }
-  const { error } = await supabase.auth.updateUser(updates)
-  if (error) {
-    Notify.create({ type: 'negative', message: error.message })
-  } else {
-    Notify.create({ type: 'positive', message: 'Perfil atualizado!' })
-  }
+  })
 }
 
 async function logout() {
-  await supabase.auth.signOut()
+  await authStore.logout()
   router.push('/login')
 }
 

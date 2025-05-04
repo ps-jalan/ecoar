@@ -48,29 +48,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { supabase } from 'boot/supabase'
+import { useRequestsStore } from 'stores/requests'
 
 const route = useRoute()
-const coleta = ref(null)
-const loading = ref(true)
+const requestsStore = useRequestsStore()
 
-function formatarData(str) {
-  if (!str) return ''
-  const d = new Date(str)
-  return d.toLocaleString('pt-BR')
-}
-
-onMounted(async () => {
-  const { id } = route.params
-  const { data, error } = await supabase.from('Coletas').select('*').eq('id', id).single()
-
-  if (error) {
-    alert('Erro ao buscar coleta: ' + error.message)
-  } else {
-    coleta.value = data
-  }
-  loading.value = false
+onMounted(() => {
+  const requestId = route.params.id
+  requestsStore.fetchStatus(requestId)
 })
 </script>

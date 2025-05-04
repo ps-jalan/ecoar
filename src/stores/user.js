@@ -5,24 +5,24 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
   }),
-  persist: true, // ⬅️ Habilita persistência local (localStorage)
   actions: {
     async fetchUser() {
       const { data, error } = await supabase.auth.getUser()
-      if (!error) {
-        this.user = data.user
+      if (error) {
+        console.error('Erro ao obter usuário:', error.message)
+        return null
       }
+      this.user = data.user
+      return data.user
     },
-    setUser(data) {
-      this.user = data
+    async updateUser(updatedData) {
+      const { data, error } = await supabase.auth.updateUser(updatedData)
+      if (error) {
+        console.error('Erro ao atualizar usuário:', error.message)
+        return false
+      }
+      this.user = data.user
+      return true
     },
-    logout() {
-      this.user = null
-      supabase.auth.signOut()
-    },
-  },
-  getters: {
-    isLoggedIn: (state) => !!state.user,
-    getUser: (state) => state.user,
   },
 })
