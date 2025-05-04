@@ -1,10 +1,13 @@
 <template>
   <q-page class="flex flex-center bg-dark text-white">
-    <q-img
-      src="~assets/logos/logo_white.webp"
-      alt="Ecoar logo"
-      style="width: 200px; height: auto"
-    />
+    <transition appear enter-active-class="animated fadeIn">
+      <q-img
+        src="~assets/logos/logo_white.webp"
+        alt="Ecoar logo"
+        style="width: 220px; height: auto"
+        class="q-mt-xl"
+      />
+    </transition>
   </q-page>
 </template>
 

@@ -1,44 +1,53 @@
 <template>
   <q-page class="bg-dark text-white q-pa-md">
-    <q-card class="card-dark q-pa-md">
-      <q-card-section>
-        <div class="text-title">Minha Carteira de Créditos</div>
-        <div class="text-subtitle2">Total acumulado</div>
-        <div class="text-h4 text-bold q-mt-md">{{ totalKg.toFixed(1) }} kg CO₂</div>
-        <div class="text-subtitle2">Equivalente a R$ {{ totalReais.toFixed(2) }}</div>
-      </q-card-section>
+    <transition appear enter-active-class="animated fadeIn">
+      <q-card class="card-dark q-pa-md q-mb-md">
+        <q-card-section>
+          <div class="text-title">Minha Carteira de Créditos</div>
+          <div class="text-subtitle2">Total acumulado</div>
+          <div class="text-h4 text-bold q-mt-md">{{ totalKg.toFixed(1) }} kg CO₂</div>
+          <div class="text-subtitle2">Equivalente a R$ {{ totalReais.toFixed(2) }}</div>
+        </q-card-section>
 
-      <q-separator />
+        <q-separator />
 
-      <q-card-section>
-        <q-btn
-          to="/resgatar"
-          label="Trocar por dinheiro ou serviços"
-          class="btn-primary full-width"
-        />
-      </q-card-section>
+        <q-card-section>
+          <BaseButton
+            label="Trocar por dinheiro ou serviços"
+            class="btn-primary full-width"
+            @click="goToRedeem"
+          />
+        </q-card-section>
+      </q-card>
+    </transition>
 
-      <q-card-section>
-        <div class="text-subtitle2 q-mb-sm">Histórico de créditos</div>
-        <q-list bordered separator>
-          <q-item v-for="(c, index) in historico" :key="index">
-            <q-item-section>
-              <q-item-label
-                >+ {{ c.kg.toFixed(1) }} kg CO₂ (R$ {{ (c.kg * 1.5).toFixed(2) }})</q-item-label
-              >
-              <q-item-label caption>{{ formatarData(c.criado_em) }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-    </q-card>
+    <transition appear enter-active-class="animated fadeInUp">
+      <q-card class="card-dark q-pa-md">
+        <q-card-section>
+          <div class="text-subtitle2 q-mb-sm">Histórico de créditos</div>
+          <q-list bordered separator>
+            <q-item v-for="(c, index) in historico" :key="index">
+              <q-item-section>
+                <q-item-label>
+                  + {{ c.kg.toFixed(1) }} kg CO₂ (R$ {{ (c.kg * 1.5).toFixed(2) }})
+                </q-item-label>
+                <q-item-label caption>{{ formatarData(c.criado_em) }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </transition>
   </q-page>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from 'boot/supabase'
+import { useRouter } from 'vue-router'
+import BaseButton from 'components/BaseButton.vue'
 
+const router = useRouter()
 const historico = ref([])
 const totalKg = ref(0)
 const totalReais = ref(0)
@@ -47,6 +56,10 @@ function formatarData(str) {
   if (!str) return ''
   const d = new Date(str)
   return d.toLocaleString('pt-BR')
+}
+
+function goToRedeem() {
+  router.push('/resgatar')
 }
 
 onMounted(async () => {

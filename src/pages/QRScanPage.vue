@@ -1,9 +1,18 @@
 <template>
-  <q-page class="bg-dark text-white q-pa-md">
-    <div class="text-title q-mb-md text-center">Escaneie o QR Code do saco</div>
+  <q-page class="bg-dark text-white q-pa-md flex flex-center column">
+    <transition appear enter-active-class="animated fadeInUp">
+      <div class="text-title text-center q-mb-md">Escaneie o QR Code do saco</div>
+    </transition>
 
-    <div id="qr-reader" class="q-mb-md" style="width: 100%; max-width: 360px; margin: 0 auto" />
-    <q-btn label="Voltar" class="btn-outline-white" to="/nova-solicitacao" />
+    <transition appear enter-active-class="animated fadeIn">
+      <div
+        id="qr-reader"
+        class="q-mb-md"
+        style="width: 100%; max-width: 360px; border-radius: 8px; overflow: hidden"
+      />
+    </transition>
+
+    <q-btn label="Voltar" class="btn-outline-white q-mt-md" to="/nova-solicitacao" />
   </q-page>
 </template>
 
@@ -45,3 +54,9 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+
+<style scoped>
+#qr-reader video {
+  border-radius: 12px;
+}
+</style>

@@ -1,17 +1,20 @@
 <template>
   <q-page class="q-pa-md flex flex-center bg-dark text-white">
-    <div>
-      <div class="text-center q-mb-xl">
-        <q-img src="~assets/logos/logo_white.webp" style="width: 200px" />
-      </div>
-      <q-card flat bordered class="q-pa-lg card-dark" style="width: 320px">
-        <q-input v-model="email" label="E-mail" class="input-base" filled />
-        <q-input v-model="senha" label="Senha" type="password" class="input-base" filled />
+    <transition appear enter-active-class="animated fadeInUp">
+      <div>
+        <q-card flat bordered class="q-pa-lg" style="width: 320px; background-color: #1e1e1e">
+          <div class="text-title text-center q-mb-md">Criar conta</div>
 
-        <q-btn label="Cadastrar" class="btn-primary q-mt-md" @click="register" />
-        <q-btn flat class="q-mt-sm full-width text-white" to="/login" label="Voltar para login" />
-      </q-card>
-    </div>
+          <q-input v-model="email" label="E-mail" class="input-dark q-mt-md" />
+
+          <q-input v-model="senha" label="Senha" type="password" class="input-dark q-mt-sm" />
+
+          <q-btn label="Cadastrar" class="btn-primary full-width q-mt-lg" @click="register" />
+
+          <q-btn flat class="q-mt-sm full-width text-white" to="/login" label="Voltar para login" />
+        </q-card>
+      </div>
+    </transition>
   </q-page>
 </template>
 
@@ -29,6 +32,7 @@ const register = async () => {
     email: email.value,
     password: senha.value,
   })
+
   if (error) {
     alert(error.message)
   } else {

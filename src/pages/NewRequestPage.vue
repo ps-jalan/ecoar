@@ -1,59 +1,65 @@
 <template>
   <q-page class="bg-dark text-white q-pa-md">
-    <q-card class="card-dark q-pa-md">
-      <q-card-section>
-        <div class="text-title">Registrar nova coleta</div>
-        <div class="text-subtitle2">Escaneie ou digite o QR Code do saco e insira os dados</div>
-      </q-card-section>
+    <transition appear enter-active-class="animated fadeIn">
+      <q-card class="card-dark q-pa-md">
+        <q-card-section>
+          <div class="text-title">Registrar nova coleta</div>
+          <div class="text-subtitle2">Escaneie ou digite o QR Code do saco e insira os dados</div>
+        </q-card-section>
 
-      <q-separator />
+        <q-separator dark />
 
-      <q-card-section>
-        <q-btn
-          class="btn-primary full-width"
-          icon="qr_code_scanner"
-          label="Escanear QR Code"
-          @click="openQRScan"
-        />
+        <q-card-section>
+          <q-btn
+            class="btn-primary full-width"
+            icon="qr_code_scanner"
+            label="Escanear QR Code"
+            @click="openQRScan"
+          />
 
-        <q-input
-          v-model="qrCode"
-          label="QR Code (ou digite manualmente)"
-          class="input-dark q-mt-md"
-        />
+          <q-input
+            v-model="qrCode"
+            label="QR Code (ou digite manualmente)"
+            class="input-dark q-mt-md"
+            filled
+          />
 
-        <q-select
-          v-model="tipoMaterial"
-          :options="tipos"
-          label="Tipo de material"
-          class="input-dark q-mt-md"
-        />
+          <q-select
+            v-model="tipoMaterial"
+            :options="tipos"
+            label="Tipo de material"
+            class="input-dark q-mt-md"
+            filled
+          />
 
-        <q-input
-          v-model.number="pesoKg"
-          type="number"
-          label="Peso (kg)"
-          class="input-dark q-mt-md"
-        />
+          <q-input
+            v-model.number="pesoKg"
+            type="number"
+            label="Peso (kg)"
+            class="input-dark q-mt-md"
+            filled
+          />
 
-        <q-input
-          v-model="observacoes"
-          type="textarea"
-          label="Observações (opcional)"
-          autogrow
-          class="input-dark q-mt-md"
-        />
-      </q-card-section>
+          <q-input
+            v-model="observacoes"
+            type="textarea"
+            label="Observações (opcional)"
+            autogrow
+            class="input-dark q-mt-md"
+            filled
+          />
+        </q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn
-          label="Salvar coleta"
-          class="btn-primary"
-          :disable="!qrCode || !tipoMaterial || !pesoKg"
-          @click="salvarColeta"
-        />
-      </q-card-actions>
-    </q-card>
+        <q-card-actions align="right">
+          <q-btn
+            label="Salvar coleta"
+            class="btn-primary"
+            @click="salvarColeta"
+            :disable="!qrCode || !tipoMaterial || !pesoKg"
+          />
+        </q-card-actions>
+      </q-card>
+    </transition>
   </q-page>
 </template>
 
@@ -65,10 +71,11 @@ import { supabase } from 'boot/supabase'
 const router = useRouter()
 const route = useRoute()
 
-const qrCode = ref('')
-const tipoMaterial = ref('')
+const qrCode = ref(null)
+const tipoMaterial = ref(null)
 const pesoKg = ref(null)
 const observacoes = ref('')
+
 const tipos = ['Papel', 'Plástico', 'Metal', 'Vidro', 'Eletrônicos']
 
 function openQRScan() {
@@ -80,6 +87,7 @@ async function salvarColeta() {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser()
+
   if (userError || !user) {
     alert('Erro ao identificar usuário.')
     return

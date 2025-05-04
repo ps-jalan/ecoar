@@ -1,32 +1,42 @@
 <template>
   <q-page class="bg-dark text-white q-pa-md">
-    <div class="text-title q-mb-lg">Bem-vindo(a) ao Ecoar</div>
+    <transition appear enter-active-class="animated fadeIn">
+      <div>
+        <div class="text-title q-mb-md">Bem-vindo(a) ao Ecoar</div>
 
-    <q-card class="card-dark q-mb-md">
-      <q-card-section>
-        <div class="text-subtitle1">Coleta atual</div>
-        <div class="text-h6">1 coleta a caminho</div>
-      </q-card-section>
-    </q-card>
+        <q-card class="card-dark q-mb-md">
+          <q-card-section>
+            <div class="text-subtitle2">Coleta atual</div>
+            <div class="text-body1 text-bold">1 coleta a caminho</div>
+          </q-card-section>
+        </q-card>
 
-    <q-card class="card-dark q-mb-md">
-      <q-card-section>
-        <div class="text-subtitle1">Créditos de carbono</div>
-        <div class="text-h6">12.4 kg CO₂</div>
-      </q-card-section>
-    </q-card>
+        <q-card class="card-dark q-mb-md">
+          <q-card-section>
+            <div class="text-subtitle2">Créditos de carbono</div>
+            <div class="text-body1 text-bold">12.4 kg CO₂</div>
+          </q-card-section>
+        </q-card>
 
-    <q-btn
-      to="/nova-solicitacao"
-      label="Nova coleta"
-      class="btn-primary full-width q-mt-md q-pa-sm"
-    />
-    <q-btn
-      to="/creditos"
-      label="Ver carteira"
-      class="btn-outline-white full-width q-mt-sm q-pa-sm"
-    />
+        <BaseButton
+          label="Nova coleta"
+          class="btn-primary full-width q-mb-sm"
+          @click="() => router.push('/nova-solicitacao')"
+        />
+
+        <BaseButton
+          label="Ver carteira"
+          class="btn-outline-white full-width"
+          @click="() => router.push('/creditos')"
+        />
+      </div>
+    </transition>
   </q-page>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+import BaseButton from 'components/BaseButton.vue'
+
+const router = useRouter()
+</script>

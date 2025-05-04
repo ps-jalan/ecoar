@@ -17,6 +17,7 @@
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@supabase/supabase-js": "^2.49.4",
+    "animate.css": "^4.1.1",
     "axios": "^1.2.1",
     "html5-qrcode": "^2.3.8",
     "pinia": "^3.0.1",
