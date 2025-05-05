@@ -9,8 +9,6 @@
           <div class="text-subtitle2">Equivalente a R$ {{ totalReais.toFixed(2) }}</div>
         </q-card-section>
 
-        <q-separator />
-
         <q-card-section>
           <BaseButton
             label="Trocar por dinheiro ou serviços"

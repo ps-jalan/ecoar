@@ -105,10 +105,11 @@ const handleFileChange = async (event) => {
 }
 
 onMounted(async () => {
-  nome.value = userStore.user_metadata?.name || ''
-  email.value = userStore.email
-  celular.value = userStore.user_metadata?.phone || ''
-  cpf.value = userStore.user_metadata?.cpf || ''
+  // console.log('userStore', userStore)
+  nome.value = userStore.user?.user_metadata?.name || ''
+  email.value = userStore.user?.email || ''
+  celular.value = userStore.user?.user_metadata?.phone || ''
+  cpf.value = userStore.user?.user_metadata?.cpf || ''
 })
 
 async function salvarPerfil() {
@@ -133,6 +134,7 @@ async function salvarPerfil() {
           color: 'positive',
           position: 'top',
         })
+        router.push('/home')
       }
     })
 }
