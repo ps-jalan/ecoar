@@ -1,20 +1,31 @@
 <template>
   <q-page class="q-pa-md flex flex-center bg-dark text-white">
+    <q-img alt="Background" src="~assets/images/background.png" class="absolute full-height" />
     <transition appear enter-active-class="animated fadeIn">
       <div>
         <div class="text-center q-mb-xl">
-          <q-img src="~assets/logos/logo_white.webp" style="width: 200px" />
+          <q-img src="~assets/logos/logo.webp" style="width: 300px; margin-top: -100px" />
         </div>
 
-        <q-card flat bordered class="card-dark q-pa-lg" style="width: 320px">
+        <q-card
+          flat
+          bordered
+          class="card-dark q-pa-lg full-width"
+          style="margin-top: -100px; min-width: 320px"
+        >
           <q-input
             v-model="email"
             label="E-mail"
+            icon="las la-envelope"
             class="input-dark q-mt-sm"
             filled
             label-color="grey-5"
             color="primary"
-          />
+          >
+            <template v-slot:prepend>
+              <q-icon name="las la-envelope" />
+            </template>
+          </q-input>
           <q-input
             v-model="senha"
             label="Senha"
@@ -23,7 +34,11 @@
             filled
             label-color="grey-5"
             color="primary"
-          />
+          >
+            <template v-slot:prepend>
+              <q-icon name="las la-key" />
+            </template>
+          </q-input>
 
           <q-btn
             label="Entrar"
@@ -57,7 +72,7 @@
         <q-btn
           label="Criar conta"
           to="/register"
-          class="btn-outline-white full-width q-mt-lg q-pa-sm"
+          class="btn-dark full-width q-mt-lg q-pa-sm q-py-md"
         />
       </div>
     </transition>

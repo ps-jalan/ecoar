@@ -16,12 +16,12 @@ export default route(function () {
     if (!userStore.user) {
       await userStore.fetchUser()
     }
-    // console.log('User:', userStore.user)
+    console.log('User:', userStore.user)
 
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
     const isAuthPage = ['/login', '/register'].includes(to.path)
 
-    if (requiresAuth && !userStore.user) {
+    if (requiresAuth && (!userStore.user || !userStore.user.user_metadata.email_verified)) {
       next('/login')
     } else if (userStore.user && isAuthPage) {
       next('/home')

@@ -13,15 +13,35 @@
 
     <q-footer class="bg-dark">
       <q-tabs align="justify" class="text-white" dense>
-        <q-route-tab to="/home" icon="home" label="Início" active-color="primary" />
+        <q-route-tab
+          to="/home"
+          icon="las la-home"
+          label="Início"
+          class="q-pa-sm text-title"
+          active-class="text-primary"
+        />
         <q-route-tab
           to="/nova-solicitacao"
-          icon="add_circle"
+          icon="las la-plus-circle"
           label="Nova Coleta"
-          active-color="primary"
+          class="q-pa-sm text-title"
+          active-class="text-primary"
+          active-icon="las la-plus-leaf"
         />
-        <q-route-tab to="/creditos" icon="eco" label="Créditos" active-color="primary" />
-        <q-route-tab to="/perfil" icon="person" label="Perfil" active-color="primary" />
+        <q-route-tab
+          to="/creditos"
+          icon="las la-leaf"
+          label="Créditos"
+          class="q-pa-sm text-title"
+          active-class="text-primary"
+        />
+        <q-route-tab
+          to="/perfil"
+          icon="las la-user"
+          label="Perfil"
+          class="q-pa-sm text-title"
+          active-class="text-primary"
+        />
       </q-tabs>
     </q-footer>
   </q-layout>

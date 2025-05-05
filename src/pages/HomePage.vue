@@ -1,8 +1,8 @@
 <template>
-  <q-page class="bg-dark text-white q-pa-md">
+  <q-page class="bg-dark text-white q-pa-xl">
     <transition appear enter-active-class="animated fadeIn">
       <div>
-        <div class="text-title q-mb-md">Bem-vindo(a) ao Ecoar</div>
+        <div class="text-title text-center q-mb-xl">Bem-vindo(a) {{ nome }}</div>
 
         <q-card class="card-dark q-mb-md">
           <q-card-section>
@@ -35,8 +35,16 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import BaseButton from 'components/BaseButton.vue'
+import { useUserStore } from 'stores/user'
 
 const router = useRouter()
+const nome = ref('')
+
+onMounted(() => {
+  const userStore = useUserStore()
+  nome.value = userStore.user?.user_metadata?.name || ''
+})
 </script>
