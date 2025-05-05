@@ -35,9 +35,8 @@ onMounted(() => {
         qrbox: { width: 250, height: 250 },
       },
       (decodedText) => {
-        qrScanner.stop().then(() => {
-          router.push({ path: '/nova-solicitacao', query: { qr: decodedText } })
-        })
+        console.log('QR Code detected:', decodedText)
+        router.push({ path: '/nova-solicitacao', query: { qr: decodedText } })
       },
       (errorMessage) => {
         if (

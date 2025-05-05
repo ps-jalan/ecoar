@@ -97,7 +97,6 @@ export const useUserStore = defineStore('user', {
         })
       }
 
-      this.user = data.user
       return { success: true }
     },
 
@@ -105,6 +104,19 @@ export const useUserStore = defineStore('user', {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
         console.error('Erro ao fazer login:', error.message)
+
+        if (error.message === 'Invalid login credentials') {
+          Notify.create({
+            type: 'negative',
+            message: 'Email ou senha inválidos.',
+          })
+        } else if (error.message === 'Email not confirmed') {
+          Notify.create({
+            type: 'negative',
+            message: 'Email não confirmado. Verifique sua caixa de entrada.',
+          })
+        }
+
         return { success: false, message: error.message }
       }
       this.user = data.user

@@ -21,12 +21,11 @@ export default route(function () {
 
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
     const isAuthPage = ['/login', '/register', '/'].includes(to.path)
-    const isVerified = userStore.user?.user_metadata.email_verified || false
 
-    if (requiresAuth && !isVerified) {
-      if (from.path !== '/login') next('/login')
+    if (requiresAuth && !userStore.user) {
+      next('/login')
     } else if (userStore.user && isAuthPage) {
-      if (from.path !== '/home') next('/home')
+      next('/home')
     } else {
       next()
     }

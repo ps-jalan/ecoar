@@ -37,7 +37,7 @@ const routes = [
   {
     path: '/qrcode',
     component: () => import('pages/QRScanPage.vue'),
-    meta: { requiresAuth: true },
+    meta: { layout: 'empty', requiresAuth: true },
   },
   {
     path: '/status/:id',

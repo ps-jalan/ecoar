@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-dark text-white">
+  <q-layout view="lHh Lpr lFf" class="bg-dark text-white" style="max-width: 960px; margin: auto">
     <q-page-container>
       <q-inner-loading
         :showing="loadingStore.isLoading"
@@ -11,7 +11,7 @@
       <router-view />
     </q-page-container>
 
-    <q-footer class="bg-dark">
+    <q-footer class="bg-dark" style="max-width: 960px; margin: auto">
       <q-tabs align="justify" class="text-white" dense>
         <q-route-tab
           to="/home"

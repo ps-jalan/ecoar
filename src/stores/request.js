@@ -3,21 +3,23 @@ import { supabase } from 'boot/supabase'
 
 export const useRequestsStore = defineStore('requests', {
   state: () => ({
-    status: null,
+    coleta: null,
   }),
   actions: {
-    async fetchStatus(requestId) {
+    async fetchColeta(requestId) {
       const { data, error } = await supabase
         .from('Coletas')
-        .select('status')
+        .select('*')
         .eq('id', requestId)
         .single()
       if (error) {
-        console.error('Erro ao buscar status da coleta:', error.message)
+        console.error('Erro ao buscar coleta:', error.message)
         return null
       }
-      this.status = data.status
-      return data.status
+      console.log('Coleta:', data)
+      this.coleta = data
+
+      return this.coleta
     },
   },
 })

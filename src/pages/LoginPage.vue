@@ -94,8 +94,6 @@ const login = async () => {
   const result = await userStore.loginWithEmail(email.value, senha.value)
   if (result.success) {
     router.push('/home')
-  } else {
-    alert(result.message)
   }
 }
 

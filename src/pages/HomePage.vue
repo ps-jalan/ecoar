@@ -26,7 +26,7 @@
 
         <BaseButton
           label="Ver carteira"
-          class="btn-outline-white full-width"
+          class="btn-outline-white full-width q-mt-md"
           @click="() => router.push('/creditos')"
         />
       </div>
