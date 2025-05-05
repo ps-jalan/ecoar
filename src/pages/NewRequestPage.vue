@@ -4,40 +4,48 @@
       <q-card class="card-dark q-pa-md">
         <q-card-section>
           <div class="text-title">Registrar nova coleta</div>
-          <div class="text-subtitle2">Escaneie ou digite o QR Code do saco e insira os dados</div>
+          <div class="text-subtitle2 q-mt-sm">
+            Escaneie ou digite o QR Code do saco e insira os dados
+          </div>
+
+          <BaseButton
+            class="full-width q-mt-md q-mb-md"
+            icon="qr_code_scanner"
+            label="Escanear QR Code"
+            @click="openQRScan"
+          />
         </q-card-section>
 
         <q-separator dark />
 
         <q-card-section>
-          <q-btn
-            class="btn-primary full-width"
-            icon="qr_code_scanner"
-            label="Escanear QR Code"
-            @click="openQRScan"
-          />
-
           <q-input
             v-model="qrCode"
             label="QR Code (ou digite manualmente)"
-            class="input-dark q-mt-md"
+            class="input-dark q-mt-sm"
             filled
+            label-color="grey-5"
+            color="primary"
           />
 
           <q-select
             v-model="tipoMaterial"
             :options="tipos"
             label="Tipo de material"
-            class="input-dark q-mt-md"
+            class="input-dark q-mt-sm"
             filled
+            label-color="grey-5"
+            color="primary"
           />
 
           <q-input
             v-model.number="pesoKg"
             type="number"
             label="Peso (kg)"
-            class="input-dark q-mt-md"
+            class="input-dark q-mt-sm"
             filled
+            label-color="grey-5"
+            color="primary"
           />
 
           <q-input
@@ -45,19 +53,21 @@
             type="textarea"
             label="Observações (opcional)"
             autogrow
-            class="input-dark q-mt-md"
+            class="input-dark q-mt-sm"
             filled
+            label-color="grey-5"
+            color="primary"
           />
         </q-card-section>
 
-        <q-card-actions align="right">
+        <q-card-section align="right">
           <q-btn
-            label="Salvar coleta"
+            label="Solicitar coleta"
             class="btn-primary"
             @click="salvarColeta"
             :disable="!qrCode || !tipoMaterial || !pesoKg"
           />
-        </q-card-actions>
+        </q-card-section>
       </q-card>
     </transition>
   </q-page>
@@ -67,6 +77,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { supabase } from 'boot/supabase'
+import BaseButton from 'components/BaseButton.vue'
 
 const router = useRouter()
 const route = useRoute()

@@ -86,7 +86,16 @@ export const useUserStore = defineStore('user', {
       })
 
       if (error) {
-        console.error(error.message)
+        console.error(error.name)
+
+        if (error.name === 'AuthWeakPasswordError') {
+          Notify.create({
+            type: 'negative',
+            message: 'A senha não está forte o suficiente.',
+          })
+        }
+
+        return { success: false }
       } else {
         console.log('Usuário registrado:', data.user)
 
@@ -124,10 +133,15 @@ export const useUserStore = defineStore('user', {
     },
 
     async loginWithGoogle() {
+      console.log('DEV MODE', import.meta.env.DEV)
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/home',
+          redirectTo:
+            (import.meta.env.DEV
+              ? window.location.origin
+              : 'http://ecoar.s3-website-us-east-1.amazonaws.com') + '/home',
         },
       })
       if (error) {

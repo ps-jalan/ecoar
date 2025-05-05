@@ -1,7 +1,7 @@
 <template>
   <q-page class="bg-dark text-white q-pa-md flex flex-center column">
     <transition appear enter-active-class="animated fadeInUp">
-      <div class="text-title text-center q-mb-md">Escaneie o QR Code do saco</div>
+      <div class="text-title text-center q-mb-md">Escaneie o QR Code</div>
     </transition>
 
     <transition appear enter-active-class="animated fadeIn">
@@ -11,8 +11,14 @@
         style="width: 100%; max-width: 360px; border-radius: 8px; overflow: hidden"
       />
     </transition>
-
-    <q-btn label="Voltar" class="btn-outline-white q-mt-md" to="/nova-solicitacao" />
+    <q-btn
+      to="/nova-solicitacao"
+      label="Voltar"
+      icon="las la-angle-left"
+      flat
+      class="full-width q-mt-lg q-pa-sm text-uppercase"
+    />
+    <!-- <q-btn label="Voltar" class="btn-outline-white q-pa-md q-mt-md" to="/nova-solicitacao" /> -->
   </q-page>
 </template>
 
@@ -32,7 +38,8 @@ onMounted(() => {
       { facingMode: 'environment' },
       {
         fps: 10,
-        qrbox: { width: 250, height: 250 },
+        qrbox: { width: 200, height: 200 },
+        aspectRatio: 3 / 4,
       },
       (decodedText) => {
         console.log('QR Code detected:', decodedText)

@@ -7,7 +7,7 @@
           <q-input
             v-model="nome"
             label="Nome Completo"
-            class="input-dark q-mt-md"
+            class="input-dark q-my-lg"
             filled
             label-color="grey-5"
             color="primary"
@@ -16,11 +16,14 @@
               <q-icon name="las la-signature" />
             </template>
           </q-input>
+
+          <q-separator spaced dark />
+
           <q-input
             v-model="email"
             label="E-mail"
             icon="las la-envelope"
-            class="input-dark q-mt-sm"
+            class="input-dark q-mt-lg"
             filled
             label-color="grey-5"
             color="primary"
@@ -33,10 +36,11 @@
             v-model="senha"
             label="Senha"
             type="password"
-            class="input-dark q-mt-sm q-mb-md"
+            class="input-dark q-mt-sm q-mb-lg"
             filled
             label-color="grey-5"
             color="primary"
+            hint="Mínimo 8 caracteres com letras e números."
           >
             <template v-slot:prepend>
               <q-icon name="las la-key" />

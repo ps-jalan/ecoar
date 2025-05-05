@@ -1,9 +1,17 @@
 <template>
   <q-page class="bg-dark text-white q-pa-xl">
-    <transition appear enter-active-class="animated fadeIn">
-      <div>
-        <div class="text-title text-center q-mb-xl">Bem-vindo(a) {{ nome }}</div>
+    <!-- <img
+      alt="Background"
+      src="~assets/images/background.png"
+      class="full-width"
+      style="height: 240px; background-repeat: no-repeat; background-size: 10%"
+    /> -->
+    <div class="text-title text-center q-mb-xl text-white q-mt-lg">
+      Bem-vindo(a),<br />{{ nome }}
+    </div>
 
+    <transition appear enter-active-class="animated fadeIn">
+      <div class="">
         <q-card class="card-dark q-mb-md">
           <q-card-section>
             <div class="text-subtitle2">Coleta atual</div>

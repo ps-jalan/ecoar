@@ -57,20 +57,17 @@
             @click="salvarPerfil"
           />
         </q-card-section>
-
-        <q-separator dark class="q-my-md" />
-
-        <q-card-section>
-          <q-btn
-            label="Sair da conta"
-            color="negative"
-            flat
-            class="full-width text-negative"
-            @click="logout"
-          />
-        </q-card-section>
       </q-card>
     </transition>
+    <q-card-section class="q-mt-lg">
+      <q-btn
+        label="Sair da conta"
+        color="negative"
+        flat
+        class="full-width text-negative q-pa-md"
+        @click="logout"
+      />
+    </q-card-section>
   </q-page>
 </template>
 
