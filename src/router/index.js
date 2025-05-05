@@ -12,19 +12,21 @@ export default route(function () {
   router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore()
 
+    console.log('User:', userStore.user)
+
     // Tenta recuperar o usuário se ainda não estiver carregado
     if (!userStore.user) {
       await userStore.fetchUser()
     }
-    console.log('User:', userStore.user)
 
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-    const isAuthPage = ['/login', '/register'].includes(to.path)
+    const isAuthPage = ['/login', '/register', '/'].includes(to.path)
+    const isVerified = userStore.user?.user_metadata.email_verified || false
 
-    if (requiresAuth && (!userStore.user || !userStore.user.user_metadata.email_verified)) {
-      next('/login')
+    if (requiresAuth && !isVerified) {
+      if (from.path !== '/login') next('/login')
     } else if (userStore.user && isAuthPage) {
-      next('/home')
+      if (from.path !== '/home') next('/home')
     } else {
       next()
     }

@@ -4,8 +4,8 @@ const routes = [
   // Público
   {
     path: '/',
-    component: () => import('pages/HomePage.vue'),
-    meta: { requiresAuth: true },
+    component: () => import('pages/LoginPage.vue'),
+    meta: { layout: 'empty' },
   },
   {
     path: '/login',
