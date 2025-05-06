@@ -134,14 +134,15 @@ export const useUserStore = defineStore('user', {
 
     async loginWithGoogle() {
       console.log('DEV MODE', import.meta.env.DEV)
-
+      //
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo:
-            (import.meta.env.DEV
-              ? window.location.origin
-              : 'http://ecoar.s3-website-us-east-1.amazonaws.com') + '/home',
+          redirectTo: window.location.origin + '/home',
+          // redirectTo:
+          //   (import.meta.env.DEV
+          //     ? window.location.origin
+          //     : 'http://ecoar.s3-website-us-east-1.amazonaws.com') + '/home',
         },
       })
       if (error) {

@@ -19,7 +19,7 @@
       </q-card>
     </transition>
 
-    <transition appear enter-active-class="animated fadeInUp">
+    <transition appear enter-active-class="animated fadeInUp" v-if="historico.length">
       <q-card class="card-dark q-pa-md">
         <q-card-section>
           <div class="text-subtitle2 q-mb-sm">Histórico de créditos</div>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { supabase } from 'boot/supabase'
+import { Notify } from 'quasar'
 
 export const useRequestsStore = defineStore('requests', {
   state: () => ({
@@ -32,6 +33,27 @@ export const useRequestsStore = defineStore('requests', {
       this.coletasDoUsuario = data
 
       return this.coletasDoUsuario
+    },
+    async createColeta(coleta) {
+      const { data, error } = await supabase.from('Coletas').insert([coleta]).select().single()
+      if (error) {
+        console.error('Erro ao criar coleta:', error.message)
+        Notify.create({
+          message: 'Erro ao criar coleta: ' + error.message,
+          color: 'negative',
+          position: 'top',
+        })
+
+        return false
+      }
+
+      Notify.create({
+        message: 'Coleta criada com sucesso!',
+        color: 'positive',
+        position: 'top',
+      })
+
+      return data
     },
   },
 })
