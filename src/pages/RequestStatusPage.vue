@@ -79,7 +79,7 @@ async function mostrarHistorico() {
   if (coleta.value.historico) {
     for (const h of coleta.value.historico) {
       await new Promise((resolve) => {
-        const tempo = Math.floor(Math.random() * (1500 - 300 + 1)) + 300
+        const tempo = Math.floor(Math.random() * (3000 - 300 + 1)) + 300
         setTimeout(() => {
           historico.value.push(h)
           resolve()

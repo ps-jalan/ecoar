@@ -110,6 +110,10 @@ function openQRScan() {
 
 async function salvarColeta() {
   // console.log('user', user)
+
+  const creditos_co2 = calcularCreditosCarbono(tipoMaterial.value, pesoKg.value).creditos_co2
+  const co2Evitado_kg = calcularCreditosCarbono(tipoMaterial.value, pesoKg.value).co2Evitado_kg
+
   const coleta = {
     user_id: user.id,
     qr_code: qrCode.value,
@@ -117,6 +121,8 @@ async function salvarColeta() {
     peso: pesoKg.value,
     observacoes: observacoes.value,
     status: 'completed',
+    creditos_co2: creditos_co2,
+    co2Evitado_kg: co2Evitado_kg,
     historico: [
       {
         status: 'waiting',
@@ -163,14 +169,61 @@ function gerarDataFuturaAleatoria() {
   return datasFuturas
 }
 
-// function calcularCreditosCarbono(
-//   pesoPapel,
-//   pesoPlastico,
-//   pesoVidro,
-//   pesoAluminio,
-//   pesoAco,
-//   pesoEletronicos,
-// ) {
+function calcularCreditosCarbono(tipoMaterial, pesoKg) {
+  let fator = 0.575
+
+  switch (tipoMaterial) {
+    case 'Papel':
+      fator = 0.575 // kg CO₂/kg
+      break
+    case 'Plástico':
+      fator = 0.63 // kg CO₂/kg
+      break
+    case 'Alumínio':
+      fator = 16.301 // kg CO₂/kg
+      break
+    case 'Aço':
+      fator = 2.032 // kg CO₂/kg
+      break
+    case 'Vidro':
+      fator = 0.25 // kg CO₂/kg
+      break
+    case 'Eletrônicos':
+      fator = 1.77 // kg CO₂/kg
+      break
+    default:
+      break
+  }
+
+  // Cálculo do total de CO₂ evitado (kg)
+  const totalCO2_kg = pesoKg * fator
+
+  // Conversão para toneladas de CO₂ (1 crédito = 1 tonelada)
+  const totalCO2_t = totalCO2_kg / 1000
+
+  // Preço do crédito de carbono por tonelada (em R$)
+  const precoPorTonelada = 80.0 // Exemplo: R$ 80,00 por crédito https://credcarbo.com/carbono/qual-o-valor-de-1-credito-de-carbono-tonelada-de-co2-no-mercado-internacional-hoje/#:~:text=No%20Brasil%20os%20valores%20de,sobre%20o%20mercado%20de%20carbono
+
+  // Valor monetário total dos créditos de carbono gerados (R$)
+  const valorTotalReais = totalCO2_t * precoPorTonelada
+
+  // Retorna um objeto com os resultados
+  return {
+    co2Evitado_kg: totalCO2_kg.toFixed(2), // CO2 evitado em kg (duas casas decimais)
+    co2Evitado_t: totalCO2_t.toFixed(3), // CO2 evitado em toneladas
+    creditos_co2: totalCO2_t.toFixed(3), // Créditos de carbono (mesmo número que toneladas)
+    valor_real: valorTotalReais.toFixed(2), // Valor em Reais (R$)
+  }
+}
+
+// function calcularCreditosCarbono(pesoPapel, pesoPlastico, pesoVidro, pesoAluminio, pesoAco, pesoEletronicos) {
+//   pesoPapel = 0,
+//   pesoPlastico = 0,
+//   pesoVidro = 0,
+//   pesoAluminio = 0,
+//   pesoAco = 0,
+//   pesoEletronicos = 0,
+
 //   // Fatores de CO₂ evitado por kg de material reciclado (kg CO₂ / kg)
 //   const fatorPapel = 0.575 // Papel: 0,575 kg CO₂/kg https://www.creditodelogisticareversa.com.br/toque-a-mais#:~:text=Para%20cada%20tonelada%20de%20pl%C3%A1stico,0%2C575%20toneladas%20de%20CO2%20equivalente
 //   const fatorPlastico = 0.63 // Plástico: 0,63 kg CO₂/kg https://www.creditodelogisticareversa.com.br/toque-a-mais#:~:text=Para%20cada%20tonelada%20de%20pl%C3%A1stico,0%2C575%20toneladas%20de%20CO2%20equivalente
