@@ -27,9 +27,14 @@ export const useRequestsStore = defineStore('requests', {
       const { data, error } = await supabase.from('Coletas').select('*').eq('user_id', userId) // Supondo que você tenha o ID do usuário armazenado no estado
       if (error) {
         console.error('Erro ao buscar coleta:', error.message)
+        Notify.create({
+          message: 'Erro ao buscar coletas do usuário: ' + error.message,
+          color: 'negative',
+          position: 'top',
+        })
         return null
       }
-      console.log('Coleta:', data)
+      // console.log('Coleta:', data)
       this.coletasDoUsuario = data
 
       return this.coletasDoUsuario

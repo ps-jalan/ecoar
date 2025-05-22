@@ -125,28 +125,28 @@ async function salvarColeta() {
     co2Evitado_kg: co2Evitado_kg,
     historico: [
       {
-        status: 'waiting',
-        criado_em: datasFuturas[0].toISOString(),
-      },
-      {
-        status: 'to_address',
-        criado_em: datasFuturas[1].toISOString(),
-      },
-      {
-        status: 'to_station',
-        criado_em: datasFuturas[2].toISOString(),
-      },
-      {
-        status: 'delivered',
-        criado_em: datasFuturas[3].toISOString(),
+        status: 'completed',
+        criado_em: datasFuturas[5].toISOString(),
       },
       {
         status: 'reviwed',
         criado_em: datasFuturas[4].toISOString(),
       },
       {
-        status: 'completed',
-        criado_em: datasFuturas[5].toISOString(),
+        status: 'delivered',
+        criado_em: datasFuturas[3].toISOString(),
+      },
+      {
+        status: 'to_station',
+        criado_em: datasFuturas[2].toISOString(),
+      },
+      {
+        status: 'to_address',
+        criado_em: datasFuturas[1].toISOString(),
+      },
+      {
+        status: 'waiting',
+        criado_em: datasFuturas[0].toISOString(),
       },
     ],
   }

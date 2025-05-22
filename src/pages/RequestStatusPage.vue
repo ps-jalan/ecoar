@@ -9,8 +9,12 @@
           flat
           class="q-mb-lg q-pa-sm text-uppercase"
         />
-
         <q-card class="card-dark q-pa-md">
+          <q-card-section>
+            <div class="text-title">Pedido {{ coleta?.id }}</div>
+          </q-card-section>
+        </q-card>
+        <q-card class="card-dark q-px-md q-pt-md">
           <q-card-section>
             <div class="text-title">
               <q-badge
@@ -23,9 +27,9 @@
             </div>
             <div class="text-subtitle2" v-if="loading">Carregando...</div>
             <div v-else>
-              <div class="text-subtitle2">Pedido: #{{ coleta?.id }}</div>
-              <div class="text-subtitle2" v-if="coleta?.criado_em">
-                Data: {{ formatarData(coleta?.criado_em) }}
+              <div class="text-subtitle2" v-if="coleta?.criado_em && historico.length > 0">
+                Última atualização:
+                {{ formatarData(coleta?.historico[historico.length - 1].criado_em) }}
               </div>
             </div>
           </q-card-section>
@@ -38,12 +42,14 @@
           <q-card-section v-else>
             <q-timeline color="primary">
               <q-timeline-entry
+                layout="comfortable"
                 v-for="coleta in historico || []"
                 :key="coleta.id"
                 :icon="coletaIcon(coleta.status)"
                 :color="coletaColor(coleta.status)"
                 :title="coletaOperationName(coleta.status)"
                 :subtitle="formatarData(coleta.criado_em)"
+                class="q-ma-none q-pa-none"
               />
             </q-timeline>
           </q-card-section>
@@ -78,13 +84,17 @@ onMounted(() => {
 async function mostrarHistorico() {
   if (coleta.value.historico) {
     for (const h of coleta.value.historico) {
-      await new Promise((resolve) => {
-        const tempo = Math.floor(Math.random() * (3000 - 300 + 1)) + 300
-        setTimeout(() => {
-          historico.value.push(h)
-          resolve()
-        }, tempo)
-      })
+      if (historico.value.length === 0) {
+        historico.value.push(h)
+      } else {
+        await new Promise((resolve) => {
+          const tempo = Math.floor(Math.random() * (3000 - 300 + 1)) + 300
+          setTimeout(() => {
+            historico.value.push(h)
+            resolve()
+          }, tempo)
+        })
+      }
     }
   }
 }
@@ -153,11 +163,11 @@ function formatarData(dataISO) {
   const dataUTC3 = new Date(data.getTime() - 3 * 60 * 60 * 1000)
 
   const dia = dataUTC3.getDate().toString().padStart(2, '0')
-  const mes = dataUTC3.toLocaleString('pt-BR', { month: 'long' })
+  const mes = dataUTC3.getDate().toString().padStart(2, '0')
   const ano = dataUTC3.getFullYear()
   const hora = dataUTC3.getHours().toString().padStart(2, '0')
   const minutos = dataUTC3.getMinutes().toString().padStart(2, '0')
 
-  return `${dia} de ${mes.charAt(0).toUpperCase() + mes.slice(1)} de ${ano} às ${hora}:${minutos}`
+  return `${dia}/${mes}/${ano} às ${hora}:${minutos}`
 }
 </script>

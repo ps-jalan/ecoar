@@ -7,11 +7,20 @@
           <div v-if="totalCredCO2 > 0" class="q-mt-md">
             <div class="text-subtitle2">Total acumulado</div>
             <div class="text-h4 text-bold q-mt-md">
-              {{ numFormatoBrasil(totalCredCO2) }} Créditos
+              <q-icon
+                name="las la-leaf"
+                size="md"
+                class="text-green q-mr-sm"
+                style="vertical-align: middle"
+              />
+              <label style="vertical-align: middle">
+                {{ numFormatoBrasil(totalCredCO2) }} Créditos
+              </label>
             </div>
-            <div class="text-subtitle2">Foram {{ totalKg }} kg reciclados</div>
-            <div class="text-subtitle2">Você reduziu {{ totalCo2Evitado_kg }} kg de CO₂</div>
-            <div class="text-subtitle2">Valor da carteira é aproximadamente {{ totalReais }}</div>
+
+            <!-- <div class="text-caption">{{ totalKg }} kg reciclados</div> -->
+            <!-- <div class="text-subtitle2">Você reduziu {{ totalCo2Evitado_kg }} kg de CO₂</div> -->
+            <!-- <div class="text-subtitle2">Valor da carteira é aproximadamente {{ totalReais }}</div> -->
           </div>
           <div v-else class="q-mt-md">
             <div class="text-subtitle2">Você ainda não possui créditos acumulados.</div>
@@ -32,21 +41,49 @@
     <transition appear enter-active-class="animated fadeInUp" v-if="historico.length">
       <q-card class="card-dark q-pa-md">
         <q-card-section>
-          <div class="text-subtitle2 q-mb-sm">Histórico de créditos</div>
-          <q-list bordered separator>
+          <div class="text-h6 q-mb-lg">Histórico de créditos</div>
+          <!-- <q-list bordered separator>
             <q-item v-for="(c, index) in historico" :key="index">
               <q-item-section>
+                <q-item-label caption class="">{{ c.criado_em }}</q-item-label>
+                <q-item-label class="text-h6 text-bold q-pb-sm">
+                  {{ c.tipo_material }} - {{ c.kg }} kg
+                </q-item-label>
                 <q-item-label>
-                  + {{ numFormatoBrasil(c.creditos_co2) }} Créditos de carbono (
-                  {{ c.valor_real }})</q-item-label
-                >
-                <q-item-label caption
-                  >Redução: {{ c.co2Evitado_kg.toFixed(2) }} kg CO₂</q-item-label
-                >
-                <q-item-label caption>{{ formatarData(c.criado_em) }}</q-item-label>
+                  <q-icon name="las la-burn" size="sm" class="text-red" />
+                  {{ numFormatoBrasil(c.co2Evitado_kg) }} kg CO₂ evitados
+                </q-item-label>
+                <q-item-label>
+                  <q-icon name="las la-leaf" size="sm" class="text-green" />
+                  {{ numFormatoBrasil(c.creditos_co2) }} Créditos de carbono ({{ c.valor_real }})
+                </q-item-label>
               </q-item-section>
             </q-item>
-          </q-list>
+          </q-list> -->
+          <q-timeline color="primary" layout="dense">
+            <q-timeline-entry
+              v-for="(c, index) in historico"
+              :key="index"
+              :title="c.tipo_material + ' - ' + c.kg + ' kg'"
+              :subtitle="c.criado_em"
+              class="q-ma-none q-pa-none"
+            >
+              <template v-slot:default>
+                <div class="q-mb-xs">
+                  <q-icon name="las la-burn" size="sm" class="text-red q-mr-xs" />
+                  <label style="vertical-align: middle">
+                    {{ numFormatoBrasil(c.co2Evitado_kg) }} kg CO₂ evitados
+                  </label>
+                </div>
+                <div>
+                  <q-icon name="las la-leaf" size="sm" class="text-green q-mr-xs" />
+                  <label style="vertical-align: middle">
+                    {{ numFormatoBrasil(c.creditos_co2) }} Créditos de carbono ({{ c.valor_real }})
+                  </label>
+                </div>
+              </template>
+            </q-timeline-entry>
+          </q-timeline>
         </q-card-section>
       </q-card>
     </transition>
@@ -54,49 +91,56 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { supabase } from 'boot/supabase'
+import { onMounted, computed } from 'vue'
+// import { supabase } from 'boot/supabase'
+import { useUserStore } from 'stores/user'
+import { useRequestsStore } from 'stores/request'
 import { useRouter } from 'vue-router'
 import BaseButton from 'components/BaseButton.vue'
 
-const router = useRouter()
-const historico = ref([])
-const totalKg = ref(0)
-const totalCo2Evitado_kg = ref(0)
-const totalCredCO2 = ref(0)
-const totalReais = ref(0)
+const userStore = useUserStore()
+const requestStore = useRequestsStore()
+const user = userStore.user
 
+const router = useRouter()
 const precoPorTonelada = 80 // Preço em reais por tonelada de CO₂
 
-// function formatarData(str) {
-//   if (!str) return ''
-//   const d = new Date(str)
-//   return d.toLocaleString('pt-BR', { style: 'date', timeZone: 'America/Sao_Paulo' })
-// }
+const coletasDoUsuario = computed(() => requestStore?.coletasDoUsuario || [])
+const historico = computed(() =>
+  coletasDoUsuario.value.map((coleta) => ({
+    tipo_material: coleta.tipo,
+    kg: coleta.peso,
+    creditos_co2: coleta.creditos_co2,
+    co2Evitado_kg: coleta.co2Evitado_kg,
+    valor_real: ajustaReal(coleta.creditos_co2 * precoPorTonelada),
+    criado_em: formatarDataBrasileira(coleta.criado_em),
+  })),
+)
+
+const totalKg = computed(() => numFormatoBrasil(historico.value.reduce((sum, c) => sum + c.kg, 0)))
+const totalCo2Evitado_kg = computed(() =>
+  numFormatoBrasil(historico.value.reduce((sum, c) => sum + c.co2Evitado_kg, 0)),
+)
+totalCo2Evitado_kg.value = numFormatoBrasil(
+  historico.value.reduce((sum, c) => sum + c.co2Evitado_kg, 0),
+)
+const totalCredCO2 = computed(() => historico.value.reduce((sum, c) => sum + c.creditos_co2, 0))
+const totalReais = computed(() => ajustaReal(totalCredCO2.value * precoPorTonelada))
+
+function formatarData(str) {
+  if (!str) return ''
+  const d = new Date(str)
+  return d.toLocaleString('pt-BR', { style: 'date', timeZone: 'America/Sao_Paulo' })
+}
 
 function goToRedeem() {
   router.push('/resgatar')
 }
 
 onMounted(async () => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
+  await requestStore.fetchColetasDoUsuario(user.id)
 
-  if (userError || !user) {
-    alert('Erro ao identificar usuário.')
-    return
-  }
-
-  const { data, error } = await supabase.from('Coletas').select('*').eq('user_id', user.id)
-
-  if (error) {
-    alert('Erro ao carregar créditos: ' + error.message)
-    return
-  }
-
-  historico.value = data.map((coleta) => ({
+  historico.value = coletasDoUsuario.value.map((coleta) => ({
     kg: coleta.peso,
     creditos_co2: coleta.creditos_co2,
     co2Evitado_kg: coleta.co2Evitado_kg,
@@ -126,18 +170,21 @@ function numFormatoBrasil(valor) {
   })
 }
 
-function formatarData(dataISO) {
-  const data = new Date(dataISO)
+function formatarDataBrasileira(dataISO) {
+  // Garante formato ISO válido substituindo espaço por 'T'
+  const data = new Date(dataISO.replace(' ', 'T') + 'Z')
 
-  // Corrige para UTC−3
-  const dataUTC3 = new Date(data.getTime() - 3 * 60 * 60 * 1000)
-  return dataUTC3
-  // const dia = dataUTC3.getDate().toString().padStart(2, '0')
-  // const mes = dataUTC3.toLocaleString('pt-BR', { month: 'long' })
-  // const ano = dataUTC3.getFullYear()
-  // const hora = dataUTC3.getHours().toString().padStart(2, '0')
-  // const minutos = dataUTC3.getMinutes().toString().padStart(2, '0')
-
-  // return `${dia} de ${mes.charAt(0).toUpperCase() + mes.slice(1)} de ${ano} às ${hora}:${minutos}`
+  // Formata para o fuso de São Paulo usando Intl
+  return new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+    .format(data)
+    .replace(',', ' às')
 }
 </script>
